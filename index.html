@@ -8,7 +8,13 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Bangers&family=Rajdhani:wght@600;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{width:100%;height:100%;overflow:hidden;}
+html,body{width:100%;height:100%;overflow:hidden;touch-action:none;}
+/* iOS Safari: usar dvh si está disponible para evitar que la barra del navegador corte el juego */
+@supports (height: 100dvh) {
+  html,body { height: 100dvh; }
+}
+/* iOS safe area (notch, home bar) */
+body { padding-bottom: env(safe-area-inset-bottom, 0px); box-sizing: border-box; }
 body{display:flex;flex-direction:column;align-items:center;font-family:'Rajdhani',Arial,sans-serif;color:#000000;background:linear-gradient(135deg,#0a0e1a 0%,#0d1428 40%,#060a14 100%);font-size:20px;}
 
 /* TOP BAR */
@@ -41,7 +47,28 @@ body{display:flex;flex-direction:column;align-items:center;font-family:'Rajdhani
 #side-left,#side-right{display:flex;flex-direction:column;gap:5px;padding:5px 4px;background:linear-gradient(180deg,#0d1428,#111b38);border-right:2px solid #1a3a6a;flex-shrink:0;overflow:hidden;}
 #side-right{border-right:none;border-left:2px solid #1a3a6a;}
 @media(min-width:601px){#side-left,#side-right{width:100px;}}
-@media(max-width:600px){#side-left,#side-right{width:76px;}}
+@media(max-width:600px){#side-left,#side-right{width:64px;}}
+/* Teléfono muy chico (iPhone SE, etc) */
+@media(max-width:380px){
+  #side-left,#side-right{width:52px;}
+  .abtn{font-size:10px;padding:5px 2px;}
+  .sbox-lbl{font-size:7px;}
+  .toplink{font-size:15px;padding:4px 8px;}
+  #brand-text{font-size:17px;}
+  .slabel{font-size:7px;}
+  .sval{font-size:12px;}
+  .cbtn{padding:8px 2px;font-size:12px;}
+  .stat{padding:3px 1px;}
+}
+/* Tablet portrait (600–900px) */
+@media(min-width:601px) and (max-width:900px){
+  #side-left,#side-right{width:80px;}
+  .cbtn{padding:10px 3px;}
+}
+/* Tablet landscape / desktop */
+@media(min-width:901px){
+  #side-left,#side-right{width:110px;}
+}
 .sbox{background:rgba(255,200,0,0.12);border:1px solid #ffd600;border-radius:8px;padding:5px;text-align:center;box-shadow:0 0 10px rgba(255,180,0,0.2);}
 .sbox-lbl{font-size:9px;color:#ffffff;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;font-weight:900;text-shadow:0 0 8px rgba(255,255,255,0.8);}
 canvas#preview{margin:0 auto;display:block;border-radius:4px;border:1px solid #c0d8f0;}
@@ -61,7 +88,7 @@ canvas#preview{margin:0 auto;display:block;border-radius:4px;border:1px solid #c
 .spd{font-family:'Orbitron',monospace;font-size:13px;color:#00e5ff;font-weight:900;text-shadow:0 0 8px rgba(0,200,255,0.6);}
 
 /* BOARD */
-#board-wrap{touch-action:none;position:relative;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#080c1a 0%,#030508 100%);}
+#board-wrap{touch-action:none;position:relative;flex:1;min-width:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#080c1a 0%,#030508 100%);overflow:hidden;}
 canvas#board{display:block;border:3px solid #ffd600;box-shadow:0 0 30px rgba(255,200,0,0.3),0 4px 40px rgba(0,0,0,0.8);}
 #flash{position:absolute;inset:0;background:white;opacity:0;pointer-events:none;transition:opacity .05s;}
 #combo-popup{position:absolute;top:8%;left:50%;transform:translateX(-50%);font-family:'Bangers',cursive;font-size:36px;letter-spacing:3px;color:#ffd600;text-shadow:3px 3px 0 #ff4500,0 0 30px rgba(255,200,0,0.9),0 0 60px rgba(255,100,0,0.5);opacity:0;pointer-events:none;white-space:nowrap;transition:opacity .15s;z-index:5;}
@@ -601,8 +628,7 @@ canvas#board {
 .leader-score{font-family:"Orbitron",monospace;font-size:13px;color:#ffd600;font-weight:900;text-shadow:0 0 10px rgba(255,200,0,0.8);}
 
 /* ── CONTROL BUTTONS EXPLAIN ─────────────────────────────── */
-#ctrl-explain{width:100%;display:none;align-items:center;justify-content:center;gap:4px;padding:4px 6px;background:linear-gradient(#050a18,#050a18) padding-box,conic-gradient(from 0deg,#ffd600,#00e5ff,#ab47bc,#ffd600) border-box;border:2px solid transparent;flex-shrink:0;overflow-x:auto;}
-@media(max-width:600px){#ctrl-explain{display:flex;}}
+#ctrl-explain{display:none!important;}
 .ctrl-btn-exp{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px 6px;border-radius:8px;min-width:52px;border:2px solid transparent;font-family:"Rajdhani",sans-serif;font-weight:900;flex-shrink:0;}
 .ctrl-btn-exp .c-icon{font-size:16px;line-height:1;}
 .ctrl-btn-exp .c-label{font-size:8px;letter-spacing:.5px;text-transform:uppercase;text-align:center;line-height:1.2;margin-top:2px;color:#fff;}
@@ -678,9 +704,9 @@ canvas#board {
     <img id="brand-logo" src="data:image/png;base64,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" alt="Silao 360">
     <div id="brand-text">ENCUESTA SILAO<span>TETRIS POLÍTICO</span></div>
   </div>
-  <div id="toplinks">
-    <button class="toplink" id="btn-jugadores" onclick="openModal('jugadores')">🏆 JUGADORES</button>
-    <button class="toplink" id="btn-como-jugar" onclick="openModal('comojugar')">❓ CÓMO JUGAR</button>
+  <div id="toplinks" style="display:flex;gap:5px;align-items:center;">
+    <button id="btn-jugadores" onclick="openModal('jugadores')" style="font-family:'Bangers',cursive;font-size:18px;letter-spacing:2px;color:#000;background:linear-gradient(135deg,#ffd600,#ff8c00);border:2px solid transparent;background:linear-gradient(#ffd600,#ff8c00) padding-box,conic-gradient(from 0deg,#fff,#ffd600,#ff4500,#ff0080,#fff) border-box;padding:6px 16px;border-radius:16px;cursor:pointer;white-space:nowrap;box-shadow:0 0 16px rgba(255,180,0,0.6),0 0 30px rgba(255,50,0,0.3);animation:spinPlay 1.2s linear infinite;transition:transform .15s;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">🏆 CAMPEONES</button>
+    <button id="btn-como-jugar" onclick="openModal('comojugar')" style="font-family:'Rajdhani',sans-serif;font-weight:900;font-size:11px;color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.2);padding:4px 8px;border-radius:8px;cursor:pointer;white-space:nowrap;">❓</button>
   </div>
 </div>
 
@@ -778,7 +804,7 @@ canvas#board {
 <script>
 // ── SUPABASE CONFIG ──────────────────────────────────────────
 const SB_URL = 'https://irekcyeoumxnwbtonfup.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlyZWtjeWVvdW14bndiY29ub2Z1cCIsInJvbGUiOiJhbm9uIiwiYXQiOjE3MDU5NzM4NzN9';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlyZWtjeWVvdW14bndiY29ub2Z1cCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzA1OTczODczLCJleHAiOjIwMjE1NDk4NzN9.Qk8om0GwVYCZ7GU9SfJGpjEr8_iNHhVHRtKWkH8RQCA';
 
 async function sbGet(table, query='') {
   try {
@@ -1024,17 +1050,26 @@ function drawBlock(context,cx,cy,party,alpha,sz){
     context.drawImage(img,x+1,y+1,s-2,s-2);
     const gi=0.08+0.07*Math.sin(glowPhase);
     context.globalAlpha=alpha*gi;context.fillStyle=party.glow;context.fillRect(x,y,s,s);context.globalAlpha=alpha;
-
+    // Trivia word overlay en bloque
+    if(s>=18){
+      context.globalAlpha=alpha*0.82;
+      context.font=`900 ${Math.max(5,Math.floor(s*.28))}px Orbitron,sans-serif`;
+      context.textAlign='center';context.textBaseline='bottom';
+      context.shadowColor='#000';context.shadowBlur=4;
+      context.fillStyle='#000000';
+      context.fillText(TRIVIA_WORDS[Math.abs(cx+cy*3)%TRIVIA_WORDS.length],x+s/2,y+s-1);
+      context.shadowBlur=0;context.globalAlpha=alpha;
+    }
   } else {
     context.fillStyle=party.bg;context.fillRect(x,y,s,s);
     context.shadowColor='rgba(0,0,0,0.9)';context.shadowBlur=3;context.fillStyle='#000000';context.font=`900 ${Math.max(8,sz*.52)}px Orbitron,Rajdhani,Arial`;
     context.textAlign='center';context.textBaseline='middle';context.fillText(party.name.slice(0,6),x+s/2,y+s/2);
   }
-  context.globalAlpha=alpha*0.5;
-  context.fillStyle='rgba(255,255,255,0.7)';context.fillRect(x,y,s,2);context.fillRect(x,y,2,s);
-  context.fillStyle='rgba(0,0,0,0.12)';context.fillRect(x,y+s-2,s,2);context.fillRect(x+s-2,y,2,s);
-  context.globalAlpha=alpha*(0.12+0.10*Math.sin(glowPhase*1.4));
-  context.strokeStyle=party.glow;context.lineWidth=1.5;context.strokeRect(x+2,y+2,s-4,s-4);
+  context.globalAlpha=alpha*0.3;
+  context.fillStyle='rgba(255,255,255,0.5)';context.fillRect(x,y,s,1);context.fillRect(x,y,1,s);
+  context.fillStyle='rgba(0,0,0,0.1)';context.fillRect(x,y+s-1,s,1);context.fillRect(x+s-1,y,1,s);
+  context.globalAlpha=alpha*(0.06+0.05*Math.sin(glowPhase*1.4));
+  context.strokeStyle=party.glow;context.lineWidth=0.7;context.strokeRect(x+1,y+1,s-2,s-2);
   context.globalAlpha=1;
 }
 function renderBoard(){
@@ -1115,31 +1150,24 @@ function clearLines(){
     const prevLv=lv;
     lv=Math.min(20,Math.floor(totalLines/10)+1);
     if(lv>prevLv) onLevelUp(lv);
-    updateUI();
-    // NO reiniciar interval aquí — lo hace tick() después
+    clearInterval(gameTimer);gameTimer=setInterval(tick,getSpeed(lv));updateUI();
   } else {combo=0;updateUI();}
 }
 function tick(){
   if(!running||!curP)return;
   if(!collides(curP,0,1)){curP.y++;}
-  else{
-    lockPiece();
-    const lockedP=curP; curP=null; // null temporal para evitar re-entrada
-    clearLines();
-    curP=nxtP;nxtP=makePiece();renderPreview();
-    if(collides(curP,0,0)){endGame();return;}
-    // Reiniciar interval UNA sola vez aquí
-    clearInterval(gameTimer);gameTimer=setInterval(tick,getSpeed(lv));
-  }
+  else{lockPiece();clearLines();curP=nxtP;nxtP=makePiece();renderPreview();if(collides(curP,0,0)){endGame();return;}}
 }
 function calcSize(){
-  const sideW=(document.querySelector('#side-left').offsetWidth||100)*2+20;
-  const topH=(document.getElementById('topbar').offsetHeight||36)+(document.getElementById('scorebar').offsetHeight||28);
-  const mobH=0;
-  const availW=window.innerWidth-sideW-6;
-  const availH=window.innerHeight-topH-mobH-10;
-  SZ=Math.max(14,Math.min(Math.floor(availW/COLS),Math.floor(availH/ROWS),32));
-  boardEl.width=COLS*SZ;boardEl.height=ROWS*SZ;
+  // Wait for layout then measure board-wrap directly — works on all devices
+  const bw=document.getElementById('board-wrap');
+  if(!bw)return;
+  const bwRect=bw.getBoundingClientRect();
+  const availW=Math.max(100, bwRect.width - 6);
+  const availH=Math.max(100, bwRect.height - 4);
+  SZ=Math.max(12,Math.min(Math.floor(availW/COLS),Math.floor(availH/ROWS),36));
+  boardEl.width=COLS*SZ;
+  boardEl.height=ROWS*SZ;
 }
 
 function startGame(){
@@ -1155,7 +1183,6 @@ function startGame(){
   document.getElementById('overlay').classList.add('hidden');
   calcSize();nxtP=makePiece();curP=makePiece();
   renderPreview();updateUI();running=true;
-  renderBoard();
   clearInterval(gameTimer);gameTimer=setInterval(tick,getSpeed(1));
   if(!glowRAF)glowLoop();
 }
@@ -1267,45 +1294,36 @@ function buildPartidoBar(){
 
 // KEYBOARD
 document.addEventListener('keydown',e=>{
-  if(['ArrowLeft','ArrowRight','ArrowDown','ArrowUp',' '].includes(e.key))e.preventDefault();
   if(!running||!curP)return;
   if(e.key==='ArrowLeft'){if(!collides(curP,-1,0)){curP.x--;sMove();}}
   else if(e.key==='ArrowRight'){if(!collides(curP,1,0)){curP.x++;sMove();}}
   else if(e.key==='ArrowDown'){tick();}
   else if(e.key==='ArrowUp'){const rot=rotateCW(curP.shape);for(const k of[0,-1,1,-2,2])if(!collides(curP,k,0,rot)){curP.shape=rot;curP.x+=k;sRot();break;}}
-  else if(e.key===' '){while(!collides(curP,0,1))curP.y++;tick();}
+  else if(e.key===' '){e.preventDefault();while(!collides(curP,0,1))curP.y++;tick();}
 });
-function addTap(id,fn){const el=document.getElementById(id);if(!el)return;el.addEventListener('touchstart',e=>{e.preventDefault();fn();},{passive:false});el.addEventListener('click',fn);}
-addTap('bLeft',()=>{if(!running||!curP)return;if(!collides(curP,-1,0)){curP.x--;sMove();}});
-addTap('bRight',()=>{if(!running||!curP)return;if(!collides(curP,1,0)){curP.x++;sMove();}});
-addTap('bRot',()=>{if(!running||!curP)return;const rot=rotateCW(curP.shape);for(const k of[0,-1,1,-2,2])if(!collides(curP,k,0,rot)){curP.shape=rot;curP.x+=k;sRot();break;}});
-addTap('bDown',()=>{if(running)tick();});
-addTap('bDrop',()=>{if(!running||!curP)return;while(!collides(curP,0,1))curP.y++;tick();});
+if(document.getElementById('bLeft'))document.getElementById('bLeft').onclick=()=>{if(!running||!curP)return;if(!collides(curP,-1,0)){curP.x--;sMove();}};
+if(document.getElementById('bRight'))document.getElementById('bRight').onclick=()=>{if(!running||!curP)return;if(!collides(curP,1,0)){curP.x++;sMove();}};
+if(document.getElementById('bRot'))document.getElementById('bRot').onclick=()=>{if(!running||!curP)return;const rot=rotateCW(curP.shape);for(const k of[0,-1,1,-2,2])if(!collides(curP,k,0,rot)){curP.shape=rot;curP.x+=k;sRot();break;}};
+if(document.getElementById('bDown'))document.getElementById('bDown').onclick=()=>{if(running)tick();};
+if(document.getElementById('bDrop'))document.getElementById('bDrop').onclick=()=>{if(!running||!curP)return;while(!collides(curP,0,1))curP.y++;tick();};
 
-// Swipe en tablero — detecta en touchmove para respuesta inmediata
-let tx=0,ty=0,tTime=0,tMoved=false;
-boardEl.addEventListener('touchstart',e=>{
-  tx=e.touches[0].clientX;ty=e.touches[0].clientY;tTime=Date.now();tMoved=false;
-},{passive:true});
-boardEl.addEventListener('touchmove',e=>{
-  if(!running||!curP||tMoved)return;
-  const dx=e.touches[0].clientX-tx,dy=e.touches[0].clientY-ty;
-  if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>22){
-    tMoved=true;
-    if(dx<0&&!collides(curP,-1,0)){curP.x--;sMove();}
-    else if(dx>0&&!collides(curP,1,0)){curP.x++;sMove();}
-  } else if(dy>40&&Math.abs(dy)>Math.abs(dx)){
-    tMoved=true;
-    while(!collides(curP,0,1))curP.y++;tick();
-  }
-},{passive:true});
+let tx=0,ty=0,tTime=0;
+// Prevent page scroll while touching anywhere in game
+document.addEventListener('touchmove',e=>{e.preventDefault();},{passive:false});
+boardEl.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;tTime=Date.now();},{passive:true});
 boardEl.addEventListener('touchend',e=>{
-  if(!running||!curP||tMoved)return;
+  if(!running||!curP)return;
   const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty,dt=Date.now()-tTime;
-  if(dt<250&&Math.abs(dx)<15&&Math.abs(dy)<15){const rot=rotateCW(curP.shape);for(const k of[0,-1,1,-2,2])if(!collides(curP,k,0,rot)){curP.shape=rot;curP.x+=k;sRot();break;}}
+  if(dt<200&&Math.abs(dx)<12&&Math.abs(dy)<12){const rot=rotateCW(curP.shape);for(const k of[0,-1,1,-2,2])if(!collides(curP,k,0,rot)){curP.shape=rot;curP.x+=k;sRot();break;}return;}
+  if(Math.abs(dx)>Math.abs(dy)){if(dx<-20&&!collides(curP,-1,0)){curP.x--;sMove();}else if(dx>20&&!collides(curP,1,0)){curP.x++;sMove();}}
+  else if(dy>30){while(!collides(curP,0,1))curP.y++;tick();}
 },{passive:true});
 
-window.addEventListener('resize',()=>{if(running){calcSize();renderBoard();}});
+let _resizeTimer=null;
+window.addEventListener('resize',()=>{
+  clearTimeout(_resizeTimer);
+  _resizeTimer=setTimeout(()=>{calcSize();if(running)renderBoard();},80);
+});
 
 // ── LÍDER ACTUAL ─────────────────────────────────────────────
 async function loadLeader() {
@@ -1326,29 +1344,41 @@ const MODAL_CONTENT = {
   comojugar: {
     title: '❓ CÓMO JUGAR',
     html: `
-      <div style="color:#fff;line-height:1.9;font-size:13px;">
-        <p style="color:#ffd600;font-family:'Orbitron',monospace;font-size:11px;margin-bottom:10px;text-align:center;">TETRIS POLÍTICO · ENCUESTA SILAO</p>
-        <p><b style="color:#ffd600;">🎯 Objetivo:</b> Completa líneas horizontales con las piezas de partidos para sumar puntos. ¡No dejes que se llene la pantalla!</p>
-        <hr style="border-color:rgba(255,200,0,0.15);margin:10px 0;">
-        <p><b style="color:#00e5ff;">⌨️ Teclado:</b></p>
-        <p><span style="background:#ffd600;color:#000;padding:1px 6px;border-radius:4px;font-size:11px;font-weight:900;">←→</span> Mover &nbsp;
-           <span style="background:#ffd600;color:#000;padding:1px 6px;border-radius:4px;font-size:11px;font-weight:900;">↑</span> Rotar &nbsp;
-           <span style="background:#ffd600;color:#000;padding:1px 6px;border-radius:4px;font-size:11px;font-weight:900;">↓</span> Bajar &nbsp;
-           <span style="background:#ffd600;color:#000;padding:1px 6px;border-radius:4px;font-size:11px;font-weight:900;">ESP</span> Caída rápida</p>
-        <p><b style="color:#00e5ff;">📱 Celular:</b> Desliza ←→ para mover, desliza ↓ para caer rápido, toca la pantalla para rotar.</p>
-        <hr style="border-color:rgba(255,200,0,0.15);margin:10px 0;">
-        <p><b style="color:#ff6d00;">🗳️ Selector de partido:</b> Elige un partido en la barra de abajo y <b>todas las piezas</b> serán de ese partido. Déjalo en <b>TODOS</b> para piezas mixtas.</p>
-        <hr style="border-color:rgba(255,200,0,0.15);margin:10px 0;">
-        <p><b style="color:#ab47bc;">⭐ Puntos:</b></p>
-        <p>1 línea = 100 pts · 2 líneas = 300 pts · 3 líneas = 500 pts · 4 líneas = 800 pts</p>
-        <p>Cada nivel aumenta la velocidad. ¡Combos dan puntos extra!</p>
-        <hr style="border-color:rgba(255,200,0,0.15);margin:10px 0;">
-        <p><b style="color:#ffd600;">🏆 Ranking:</b> Al terminar la partida tu puntuación se guarda automáticamente con tu apodo. ¡Compite por el primer lugar!</p>
-        <p style="margin-top:8px;font-size:11px;color:rgba(255,255,255,0.4);text-align:center;">Silao 360 · silao360.com</p>
+      <div style="font-size:11px;line-height:1.5;color:#fff;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
+          <div style="background:rgba(255,200,0,0.08);border:1px solid rgba(255,200,0,0.25);border-radius:8px;padding:7px;">
+            <div style="color:#ffd600;font-weight:900;font-size:10px;margin-bottom:4px;">⌨️ TECLADO</div>
+            <div><span style="background:#ffd600;color:#000;padding:0 5px;border-radius:3px;font-size:10px;font-weight:900;">←→</span> Mover</div>
+            <div><span style="background:#ffd600;color:#000;padding:0 5px;border-radius:3px;font-size:10px;font-weight:900;">↑</span> Rotar</div>
+            <div><span style="background:#ffd600;color:#000;padding:0 5px;border-radius:3px;font-size:10px;font-weight:900;">↓</span> Bajar</div>
+            <div><span style="background:#ffd600;color:#000;padding:0 4px;border-radius:3px;font-size:10px;font-weight:900;">ESP</span> Caída</div>
+          </div>
+          <div style="background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.25);border-radius:8px;padding:7px;">
+            <div style="color:#00e5ff;font-weight:900;font-size:10px;margin-bottom:4px;">📱 CELULAR</div>
+            <div>← → Desliza</div>
+            <div>↓ Desliza abajo</div>
+            <div>👆 Toca = Rotar</div>
+            <div>Usa botones abajo</div>
+          </div>
+        </div>
+        <div style="background:rgba(171,71,188,0.08);border:1px solid rgba(171,71,188,0.25);border-radius:8px;padding:7px;margin-bottom:6px;">
+          <div style="color:#ab47bc;font-weight:900;font-size:10px;margin-bottom:3px;">⭐ PUNTOS</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span>1 línea = <b style="color:#ffd600;">100</b></span>
+            <span>2 = <b style="color:#ffd600;">300</b></span>
+            <span>3 = <b style="color:#ffd600;">500</b></span>
+            <span>4 = <b style="color:#ff4500;">800 🔥</b></span>
+          </div>
+          <div style="margin-top:3px;color:rgba(255,255,255,0.5);">Nivel y combos multiplican tus puntos</div>
+        </div>
+        <div style="background:rgba(255,109,0,0.08);border:1px solid rgba(255,109,0,0.25);border-radius:8px;padding:7px;">
+          <div style="color:#ff6d00;font-weight:900;font-size:10px;margin-bottom:3px;">🗳️ PARTIDOS · 🏆 RANKING</div>
+          <div>Elige partido abajo para piezas de un solo partido, o deja <b style="color:#ffd600;">TODOS</b> para mezcla.</div>
+          <div style="margin-top:3px;color:rgba(255,255,255,0.5);">Score se guarda automáticamente con tu apodo.</div>
+        </div>
       </div>`
   }
 };
-
 async function openModal(type) {
   const bg = document.getElementById('modal-bg');
   const title = document.getElementById('modal-title');
@@ -1359,35 +1389,61 @@ async function openModal(type) {
     title.textContent = MODAL_CONTENT.comojugar.title;
     body.innerHTML = MODAL_CONTENT.comojugar.html;
   } else if (type === 'jugadores') {
-    title.textContent = '🏆 TABLA DE CAMPEONES';
-    body.innerHTML = '<div id="modal-loading">Cargando jugadores...</div>';
+    title.innerHTML = '🏆 TABLA DE CAMPEONES';
+    body.innerHTML = '<div id="modal-loading">Cargando campeones...</div>';
     const data = await sbGet('tetris_scores', '?order=score.desc&limit=20&select=nickname,score,nivel,partido,created_at');
     if (!data || data.length === 0) {
-      body.innerHTML = '<div id="modal-empty">¡Aún no hay jugadores registrados!<br>¡Sé el primero! 🥇</div>';
+      body.innerHTML = '<div id="modal-empty">¡Aún no hay jugadores!<br>¡Sé el primero! 🥇</div>';
       return;
     }
-    const medals = ['🥇','🥈','🥉'];
-    const rows = data.map((r, i) => {
-      const medal = i < 3 ? medals[i] : `${i+1}`;
+    const podiumColors = [
+      'linear-gradient(135deg,#7a5c00,#ffd600,#a07800)',
+      'linear-gradient(135deg,#3a3a4a,#b0b8d0,#5a5a6a)',
+      'linear-gradient(135deg,#5c2800,#cd7c3a,#7a4010)'
+    ];
+    const rankBg = ['rgba(255,200,0,0.13)','rgba(180,190,210,0.09)','rgba(180,100,30,0.09)'];
+    const trophyBig = ['🥇','🥈','🥉'];
+    // Top 3 podium
+    let podiumHTML = '';
+    if(data.length >= 1) {
+      podiumHTML = '<div style="display:flex;gap:6px;margin-bottom:10px;align-items:flex-end;">';
+      // Order: 2nd, 1st, 3rd
+      const order = data.length === 1 ? [0] : data.length === 2 ? [1,0] : [1,0,2];
+      const heights = ['72px','90px','60px'];
+      const labelH = ['2°','1°','3°'];
+      order.forEach((idx, pos) => {
+        const r = data[idx];
+        const h = heights[pos];
+        const grad = podiumColors[idx] || 'rgba(255,255,255,0.1)';
+        podiumHTML += `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
+          <div style="font-size:${idx===0?'22px':'16px'}">${trophyBig[idx]}</div>
+          <div style="font-family:'Orbitron',monospace;font-size:9px;color:#fff;font-weight:900;text-align:center;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${r.nickname||'Anon'}</div>
+          <div style="font-family:'Orbitron',monospace;font-size:11px;color:#ffd600;font-weight:900;">${(r.score||0).toLocaleString()}</div>
+          <div style="height:${h};width:100%;background:${grad};border-radius:6px 6px 0 0;border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;">
+            <span style="font-family:'Bangers',cursive;font-size:22px;color:rgba(255,255,255,0.25);">${labelH[pos]}</span>
+          </div>
+        </div>`;
+      });
+      podiumHTML += '</div>';
+    }
+    // Rest of the list (4th onwards)
+    const restRows = data.slice(3).map((r,i) => {
       const d = r.created_at ? new Date(r.created_at) : null;
-      const fecha = d ? `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}` : '';
-      const partido = r.partido && r.partido !== 'TODOS' ? `<span style="font-size:10px;color:#ab47bc;display:block;">${r.partido}</span>` : '';
-      return `<tr>
-        <td style="text-align:center;font-size:16px;">${medal}</td>
-        <td><span class="modal-nick">${r.nickname||'Anon'}</span>${partido}</td>
-        <td class="modal-score">${(r.score||0).toLocaleString()}</td>
-        <td style="color:#9bc;font-family:Orbitron,monospace;font-size:11px;">${r.nivel||1}</td>
-        <td class="modal-date">${fecha}</td>
+      const fecha = d ? `${d.getDate()}/${d.getMonth()+1}` : '';
+      const partido = r.partido && r.partido !== 'TODOS' ? `<span style="font-size:9px;color:#ab47bc;"> · ${r.partido}</span>` : '';
+      return `<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+        <td style="text-align:center;color:rgba(255,255,255,0.4);font-size:11px;padding:4px 4px;">${i+4}</td>
+        <td style="padding:4px 4px;"><span style="font-family:'Orbitron',monospace;font-size:10px;color:#fff;">${r.nickname||'Anon'}</span>${partido}</td>
+        <td style="font-family:'Orbitron',monospace;font-size:11px;color:#ffd600;padding:4px 4px;">${(r.score||0).toLocaleString()}</td>
+        <td style="font-family:'Orbitron',monospace;font-size:10px;color:#00e5ff;padding:4px 4px;">Nv${r.nivel||1}</td>
+        <td style="font-size:9px;color:rgba(255,255,255,0.3);padding:4px 4px;">${fecha}</td>
       </tr>`;
     }).join('');
+    const tableHTML = restRows ? `<table style="width:100%;border-collapse:collapse;">${restRows}</table>` : '';
     body.innerHTML = `
-      <table>
-        <tr>
-          <th>#</th><th>JUGADOR</th><th>PUNTOS</th><th>NIV</th><th>FECHA</th>
-        </tr>
-        ${rows}
-      </table>
-      <p style="text-align:center;font-size:10px;color:rgba(255,255,255,0.3);margin-top:10px;">Top 20 de todos los tiempos</p>`;
+      ${podiumHTML}
+      ${tableHTML}
+      <p style="text-align:center;font-size:9px;color:rgba(255,255,255,0.25);margin-top:8px;">Top 20 · Silao 360 Tetris Político</p>`;
   }
 }
 
@@ -1398,10 +1454,15 @@ function closeModal() {
 // INIT
 buildPartidoBar();
 buildSideLogos();
-calcSize();
-makeBoard();
-glowLoop();
-loadLeaderboard();
+// Defer first calcSize until layout is fully painted
+requestAnimationFrame(()=>{
+  requestAnimationFrame(()=>{
+    calcSize();
+    makeBoard();
+    glowLoop();
+    loadLeaderboard();
+  });
+});
 
 // ── STAT BUTTONS ─────────────────────────────────────────────
 const AC = new (window.AudioContext||window.webkitAudioContext)();
@@ -1654,16 +1715,16 @@ const AC = new (window.AudioContext||window.webkitAudioContext)();
           pointer-events:none;z-index:9999;white-space:nowrap;
           left:0;top:0;`;
         document.body.appendChild(b);
-        const speed=H*0.55+Math.random()*H*0.25;
-        const vx=(Math.random()-0.5)*35;
-        let y=-90,x=Math.random()*W,t=0,wobble=(Math.random()-0.5)*18;
+        const speed=H*1.8+Math.random()*H*1.0;
+        const vx=(Math.random()-0.5)*60;
+        let y=-90,x=Math.random()*W,t=0,wobble=(Math.random()-0.5)*22;
         const tick=()=>{
           t+=16; y+=speed*0.016; x+=vx*0.016;
-          b.style.transform=`translate(${x}px,${y}px) rotate(${wobble*Math.sin(t/220)}deg)`;
+          b.style.transform=`translate(${x}px,${y}px) rotate(${wobble*Math.sin(t/180)}deg)`;
           if(y<H+120) requestAnimationFrame(tick); else b.remove();
         };
         requestAnimationFrame(tick);
-      }, i*160);
+      }, i*95);
     }
   }
 
