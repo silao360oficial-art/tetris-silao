@@ -615,17 +615,25 @@ canvas#board {
 
 
 /* ── LÍDER ACTUAL BANNER ─────────────────────────────────── */
-#leader-bar{width:100%;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:3px 10px;flex-shrink:0;border:2px solid transparent;
-  background:linear-gradient(#1a0533,#2d0a4e) padding-box,
-    conic-gradient(from 0deg,#ffd600,#ab47bc,#00e5ff,#ffd600) border-box;
-  animation:spinSb 3s linear infinite;}
-#leader-sites{display:flex;gap:8px;align-items:center;flex-shrink:0;}
-.site-link{font-family:'Rajdhani',sans-serif;font-weight:900;font-size:16px;color:#ffd600;text-decoration:none;white-space:nowrap;text-shadow:0 0 8px rgba(255,200,0,0.5);}
-.site-link:hover{color:#fff;}
-#leader-bar-inner{display:flex;align-items:center;gap:6px;flex-shrink:0;}
-.leader-tag{font-family:"Rajdhani",sans-serif;font-size:10px;font-weight:900;color:#ffd600;letter-spacing:2px;text-transform:uppercase;background:rgba(255,200,0,0.15);border:1px solid #ffd600;padding:1px 7px;border-radius:8px;animation:pulse-lb 1.8s ease-in-out infinite;}
-.leader-nick{font-family:"Orbitron",monospace;font-size:13px;font-weight:900;color:#fff;text-shadow:0 0 10px rgba(255,255,255,0.9);}
-.leader-score{font-family:"Orbitron",monospace;font-size:13px;color:#ffd600;font-weight:900;text-shadow:0 0 10px rgba(255,200,0,0.8);}
+#leader-bar{width:100%;display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:3px 10px;flex-shrink:0;border:2px solid transparent;background:linear-gradient(#0a0414,#12062a) padding-box,conic-gradient(from var(--lb-angle,0deg),#ffd600,#ab47bc,#00e5ff,#ffd600) border-box;animation:spinSb 3s linear infinite;}
+@property --lb-angle{syntax:"<angle>";inherits:false;initial-value:0deg;}
+@keyframes spinSb{to{--lb-angle:360deg;}}
+#leader-sites{display:flex;gap:6px;align-items:center;flex-shrink:0;}
+.site-link{font-family:'Rajdhani',sans-serif;font-weight:900;font-size:13px;color:#fff;text-decoration:none;white-space:nowrap;padding:3px 12px;background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.22);border-radius:18px;transition:background .2s,border-color .2s;letter-spacing:.3px;}
+.site-link:hover{background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.5);}
+/* Leader pill */
+@property --la{syntax:"<angle>";inherits:false;initial-value:0deg;}
+#leader-inline{display:flex;align-items:center;gap:6px;border-radius:22px;padding:3px 12px 3px 5px;position:relative;overflow:visible;flex-shrink:0;border:2px solid transparent;background:linear-gradient(#0a0414,#12062a) padding-box,conic-gradient(from var(--la),#ffd600,#ff4444,#00e5ff,#69ff47,#ab47bc,#ffd600) border-box;animation:leaderRot 0.7s linear infinite;}
+@keyframes leaderRot{to{--la:360deg;}}
+.leader-crown{font-size:16px;line-height:1;animation:leaderBounce 1.8s ease-in-out infinite;display:inline-block;}
+@keyframes leaderBounce{0%,100%{transform:scale(1) rotate(-5deg);}50%{transform:scale(1.25) rotate(5deg);}}
+.leader-tag{font-family:"Rajdhani",sans-serif;font-size:8px;font-weight:900;color:rgba(255,200,0,0.65);letter-spacing:3px;text-transform:uppercase;display:block;line-height:1;}
+.leader-nick{font-family:"Bangers",cursive;font-size:16px;letter-spacing:2px;line-height:1;display:inline-block;animation:nickColor 1.4s linear infinite,nickWobble 0.5s ease-in-out infinite,nickZoom 1.8s ease-in-out infinite;}
+@keyframes nickColor{0%{color:#fff;text-shadow:0 0 10px #fff;}16%{color:#ff4444;text-shadow:0 0 12px #ff4444;}33%{color:#ffd600;text-shadow:0 0 12px #ffd600;}50%{color:#00e5ff;text-shadow:0 0 12px #00e5ff;}66%{color:#69ff47;text-shadow:0 0 12px #69ff47;}83%{color:#ab47bc;text-shadow:0 0 12px #ab47bc;}100%{color:#fff;text-shadow:0 0 10px #fff;}}
+@keyframes nickWobble{0%,100%{transform:rotate(-3deg) skewX(0deg);}25%{transform:rotate(3deg) skewX(3deg);}50%{transform:rotate(-2deg) skewX(-2deg);}75%{transform:rotate(2deg) skewX(1deg);}}
+@keyframes nickZoom{0%,100%{letter-spacing:2px;}50%{letter-spacing:6px;}}
+.leader-sep{color:rgba(255,200,0,0.3);font-size:10px;margin:0 2px;}
+.leader-score{font-family:"Orbitron",monospace;font-size:11px;color:#ffd600;font-weight:900;text-shadow:0 0 6px rgba(255,200,0,0.6);}
 
 /* ── CONTROL BUTTONS EXPLAIN ─────────────────────────────── */
 #ctrl-explain{display:none!important;}
@@ -721,14 +729,20 @@ canvas#board {
 
 <!-- LÍDER ACTUAL -->
 <div id="leader-bar">
-  <div id="leader-sites">
-    <a class="site-link" href="https://silao360.com" target="_blank">🌐 silao360.com</a>
-    <a class="site-link" href="https://silao360.com.mx/" target="_blank">📊 Encuesta Silao</a>
-  </div>
-  <div id="leader-bar-inner">
-    <span class="leader-tag">🥇 LÍDER</span>
-    <span class="leader-nick" id="leader-nick">—</span>
+  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+    <div id="leader-sites">
+      <a class="site-link" href="https://silao360.com" target="_blank">🌐 Silao</a>
+      <a class="site-link" href="https://silao360.com.mx/" target="_blank">📊 Encuesta</a>
+    </div>
+    <div id="leader-inline">
+    <span class="leader-crown">🏆</span>
+    <div style="display:flex;flex-direction:column;line-height:1.1;">
+      <span class="leader-tag">LÍDER</span>
+      <span class="leader-nick" id="leader-nick">—</span>
+    </div>
+    <span class="leader-sep">·</span>
     <span class="leader-score" id="leader-score">—</span>
+    </div>
   </div>
 </div>
 
@@ -736,7 +750,7 @@ canvas#board {
 <div id="game-wrapper">
   <div id="side-left">
     <div class="sbox" style="text-align:center;">
-      <div class="sbox-lbl" style="font-size:9px;margin-bottom:4px;">🎮 JUEGA CON TU LOGO O CON TODOS</div>
+      <div class="sbox-lbl" style="font-size:9px;margin-bottom:4px;">🎮 ELIGE TU LOGO</div>
       <div id="side-logos" style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;"></div>
     </div>
   </div>
@@ -898,6 +912,9 @@ let milestone1kDone = false;
 let milestone5kDone = false;
 let leaderBeatenDone = false;
 let currentLeaderScore = 0; // se llena al cargar
+// triggers personalizados
+let trig1000=false,trig1500=false,trig2000=false,trig2500=false,trig3000=false,trig4000=false;
+let trigLv2=false,trigLn20=false;
 
 function autoCelebrate(tipo){
   setTimeout(()=>{
@@ -934,8 +951,8 @@ function checkMilestone(newScore) {
     milestone5kDone = true;
     autoCelebrate('5mil');
   }
-  // Líder superado (si tabla vacía, cualquier score > 0 es nuevo líder)
-  if(!leaderBeatenDone && newScore > 0 && newScore > currentLeaderScore){
+  // Líder superado
+  if(!leaderBeatenDone && currentLeaderScore > 0 && newScore > currentLeaderScore && newScore > 500){
     leaderBeatenDone = true;
     autoCelebrate('lider');
   }
@@ -947,6 +964,13 @@ function checkMilestone(newScore) {
       break;
     }
   }
+  // ── DISPARADORES LOCOS DE PARTIDOS ──────────────────────────
+  const C = window._tetrisCelebrate;
+  if(!trig1000 && newScore >= 1000){ trig1000=true; if(C){ C.spawnPartidos(); C.showToast('🗳️ ¡1,000 PUNTOS! ¿YA VOTASTE?','#1565c0'); } }
+  if(!trig1500 && newScore >= 1500){ trig1500=true; if(C){ C.spawnPartidos(); C.showToast('🔥 ¡1,500! ¡SIGUE ASÍ SILAO!','#ff4500'); } }
+  if(!trig2500 && newScore >= 2500){ trig2500=true; if(C){ C.spawnPartidos(); C.showToast('🌪️ ¡2,500! ¡LOS PARTIDOS TE INVADEN!','#ab47bc'); } }
+  if(!trig3000 && newScore >= 3000){ trig3000=true; if(C){ C.spawnPartidos(); C.showToast('💥 ¡3,000! ¡AGUANTA!','#e65100'); } }
+  if(!trig4000 && newScore >= 4000){ trig4000=true; if(C){ C.spawnPartidos(); C.spawnPartidos(); C.showToast('🎪 ¡4,000! ¡TODO EL CIRCO POLÍTICO!','#ffd600'); } }
 }
 
 function showMilestone(pts) {
@@ -962,6 +986,8 @@ function showMilestone(pts) {
 }
 
 function onLevelUp(newLv) {
+  // Nivel 2 — lluvia de partidos
+  if(!trigLv2 && newLv >= 2){ trigLv2=true; const C=window._tetrisCelebrate; if(C){ C.spawnPartidos(); C.showToast('⬆️ ¡NIVEL 2! ¡LOS PARTIDOS ATACAN!','#00e5ff'); } }
   // Level up banner
   const board = document.getElementById('board-wrap');
   const el = document.createElement('div');
@@ -1050,12 +1076,8 @@ function drawBlock(context,cx,cy,party,alpha,sz){
     context.drawImage(img,x+1,y+1,s-2,s-2);
     const gi=0.08+0.07*Math.sin(glowPhase);
     context.globalAlpha=alpha*gi;context.fillStyle=party.glow;context.fillRect(x,y,s,s);context.globalAlpha=alpha;
-    // glow pulse sin texto encima
   } else {
     context.fillStyle=party.bg;context.fillRect(x,y,s,s);
-    context.shadowColor=party.glow;context.shadowBlur=10;context.fillStyle='#ffffff';context.font=`900 ${Math.max(8,sz*.52)}px Orbitron,Rajdhani,Arial`;
-    context.textAlign='center';context.textBaseline='middle';context.fillText(party.name.slice(0,6),x+s/2,y+s/2);
-    context.shadowBlur=0;
   }
   context.globalAlpha=alpha*0.1;
   context.fillStyle='rgba(255,255,255,0.35)';context.fillRect(x,y,s,1);context.fillRect(x,y,1,s);
@@ -1136,7 +1158,10 @@ function clearLines(){
   if(cleared>0){
     combo++;rows.forEach(row=>spawnParticles(row,curP&&curP.party?curP.party.glow:'#1976d2'));
     flashEffect();showCombo(combo,cleared);sLine(cleared);
-    totalLines+=cleared;const pts=[0,100,300,500,800];
+    totalLines+=cleared;
+    // 20 líneas = lluvia de partidos
+    if(!trigLn20 && totalLines >= 20){ trigLn20=true; const C=window._tetrisCelebrate; if(C){ C.spawnPartidos(); C.showToast('🗳️ ¡20 LÍNEAS! ¡PURA POLÍTICA!','#2e7d32'); } }
+    const pts=[0,100,300,500,800];
     score+=(pts[cleared]||800)*lv*Math.max(1,combo);
     checkMilestone(score);
     const prevLv=lv;
@@ -1170,8 +1195,10 @@ function startGame(){
   const ni=document.getElementById('nick-input');
   if(ni && !ni.value.trim()) ni.value=playerNick;
   if(document.getElementById('nick-disp'))document.getElementById('nick-disp').textContent=playerNick;
-  makeBoard();score=0;lv=1;totalLines=0;combo=0;lastMilestone=0;
+  makeBoard();score=0;lv=1;totalLines=0;combo=0;lastMilestone=0;trig1000=false;trig1500=false;trig2000=false;trig2500=false;trig3000=false;trig4000=false;trigLv2=false;trigLn20=false;milestone1kDone=false;milestone5kDone=false;leaderBeatenDone=false;
   milestone1kDone=false;milestone5kDone=false;leaderBeatenDone=false;
+  // Capturar el score del líder AL INICIO — no cambia durante la partida
+  const leaderAtStart = currentLeaderScore;
   document.getElementById('overlay').classList.add('hidden');
   calcSize();nxtP=makePiece();curP=makePiece();
   renderPreview();updateUI();running=true;
@@ -1187,7 +1214,6 @@ function buildOvHTML(isGO){
     <div class="ofinal">${score.toLocaleString()}</div>
     <div class="osub" style="font-size:11px;color:rgba(255,255,255,0.5)">HI: ${hiScore.toLocaleString()}</div>
     <button id="play-btn">🔄 DE NUEVO</button>
-    <div id="leaderboard"><div id="lb-loading">Guardando...</div></div>
     <div class="olinks"><a class="olink" href="https://silao360.com" target="_blank">🌐 Web</a><a class="olink" href="https://silao360.com.mx/" target="_blank">📊 Encuesta</a></div>`;
   return `${logoImg}<h2>ENCUESTA SILAO<span>TETRIS POLÍTICO</span></h2>
     <div class="osub">${modeLabel}<br>¡Ordena los partidos! 🗳️</div>
@@ -1202,8 +1228,9 @@ function showOverlay(isGO){
   const ov=document.getElementById('overlay');
   ov.innerHTML=buildOvHTML(isGO);ov.classList.remove('hidden');
   if(isGO){
+    // Guardar score silenciosamente, sin abrir nada
     saveScore(playerNick,score,lv,selectedParty?selectedParty.name:'TODOS')
-      .then(()=>loadLeaderboard());
+      .catch(e=>console.error('[tetris] saveScore error:', e));
     document.getElementById('play-btn').onclick=()=>{ov.innerHTML=buildOvHTML(false);ov.classList.remove('hidden');loadLeaderboard();document.getElementById('play-btn').onclick=startGame;};
   } else {
     loadLeaderboard();
@@ -1293,21 +1320,15 @@ document.addEventListener('keydown',e=>{
   else if(e.key==='ArrowUp'){const rot=rotateCW(curP.shape);for(const k of[0,-1,1,-2,2])if(!collides(curP,k,0,rot)){curP.shape=rot;curP.x+=k;sRot();break;}}
   else if(e.key===' '){e.preventDefault();while(!collides(curP,0,1))curP.y++;tick();}
 });
-function addCtrlBtn(id, fn) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.addEventListener('touchstart', e => { e.preventDefault(); if (running) fn(); }, { passive: false });
-  el.addEventListener('click', () => { if (running) fn(); });
-}
-addCtrlBtn('bLeft',  ()=>{ if(curP&&!collides(curP,-1,0)){curP.x--;sMove();} });
-addCtrlBtn('bRight', ()=>{ if(curP&&!collides(curP,1,0)){curP.x++;sMove();} });
-addCtrlBtn('bRot',   ()=>{ if(!curP)return;const rot=rotateCW(curP.shape);for(const k of[0,-1,1,-2,2])if(!collides(curP,k,0,rot)){curP.shape=rot;curP.x+=k;sRot();break;} });
-addCtrlBtn('bDown',  ()=>{ tick(); });
-addCtrlBtn('bDrop',  ()=>{ if(!curP)return;while(!collides(curP,0,1))curP.y++;tick(); });
+if(document.getElementById('bLeft'))document.getElementById('bLeft').onclick=()=>{if(!running||!curP)return;if(!collides(curP,-1,0)){curP.x--;sMove();}};
+if(document.getElementById('bRight'))document.getElementById('bRight').onclick=()=>{if(!running||!curP)return;if(!collides(curP,1,0)){curP.x++;sMove();}};
+if(document.getElementById('bRot'))document.getElementById('bRot').onclick=()=>{if(!running||!curP)return;const rot=rotateCW(curP.shape);for(const k of[0,-1,1,-2,2])if(!collides(curP,k,0,rot)){curP.shape=rot;curP.x+=k;sRot();break;}};
+if(document.getElementById('bDown'))document.getElementById('bDown').onclick=()=>{if(running)tick();};
+if(document.getElementById('bDrop'))document.getElementById('bDrop').onclick=()=>{if(!running||!curP)return;while(!collides(curP,0,1))curP.y++;tick();};
 
 let tx=0,ty=0,tTime=0;
-// Prevent page scroll ONLY while touching the board canvas
-boardEl.addEventListener('touchmove',e=>{e.preventDefault();},{passive:false});
+// Prevent page scroll while touching anywhere in game
+document.addEventListener('touchmove',e=>{e.preventDefault();},{passive:false});
 boardEl.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;tTime=Date.now();},{passive:true});
 boardEl.addEventListener('touchend',e=>{
   if(!running||!curP)return;
@@ -1331,11 +1352,16 @@ async function loadLeader() {
     const sc = document.getElementById('leader-score');
     if (nick) nick.textContent = data[0].nickname || 'Anon';
     if (sc) sc.textContent = (data[0].score || 0).toLocaleString() + ' pts';
-    currentLeaderScore = data[0].score || 0;
+    // Solo actualizar el score de referencia si NO hay partida en curso
+    if (!running) currentLeaderScore = data[0].score || 0;
   }
 }
-loadLeader();
-setInterval(loadLeader, 30000);
+// Esperar DOM antes de cargar leader
+setTimeout(()=>{
+  loadLeader();
+  setInterval(loadLeader, 30000);
+}, 800);
+
 
 // ── MODAL ─────────────────────────────────────────────────────
 const MODAL_CONTENT = {
@@ -1389,71 +1415,59 @@ async function openModal(type) {
   } else if (type === 'jugadores') {
     title.innerHTML = '🏆 TABLA DE CAMPEONES';
     body.innerHTML = '<div id="modal-loading">Cargando campeones...</div>';
-    const data = await sbGet('tetris_scores', '?order=score.desc&limit=100&select=nickname,score,nivel,partido,created_at');
+    const data = await sbGet('tetris_scores', '?order=score.desc&limit=20&select=nickname,score,nivel,partido,created_at');
     if (!data || data.length === 0) {
       body.innerHTML = '<div id="modal-empty">¡Aún no hay jugadores!<br>¡Sé el primero! 🥇</div>';
       return;
     }
-
-    // ── PODIO TOP 3 ──────────────────────────────────────────────
-    const podiumDefs = [
-      { idx:1, pos:'2°', height:'72px', nameColor:'#c8d8f0', scoreColor:'#c0d0e8',
-        grad:'linear-gradient(180deg,#4a4a5a,#8a9ab0,#3a3a4a)',
-        glow:'rgba(180,200,220,0.6)', shadow:'0 0 20px rgba(150,180,220,0.8)', label:'🥈 PLATA' },
-      { idx:0, pos:'1°', height:'96px', nameColor:'#fff200', scoreColor:'#ffd600',
-        grad:'linear-gradient(180deg,#7a5c00,#ffd600,#a07800)',
-        glow:'rgba(255,200,0,0.9)', shadow:'0 0 30px rgba(255,200,0,1),0 0 60px rgba(255,100,0,0.5)', label:'🥇 ORO' },
-      { idx:2, pos:'3°', height:'55px', nameColor:'#ffab40', scoreColor:'#ff8c00',
-        grad:'linear-gradient(180deg,#5c2800,#cd7c3a,#7a4010)',
-        glow:'rgba(200,100,30,0.6)', shadow:'0 0 18px rgba(200,100,30,0.8)', label:'🥉 BRONCE' },
+    const podiumColors = [
+      'linear-gradient(135deg,#7a5c00,#ffd600,#a07800)',
+      'linear-gradient(135deg,#3a3a4a,#b0b8d0,#5a5a6a)',
+      'linear-gradient(135deg,#5c2800,#cd7c3a,#7a4010)'
     ];
-
-    let podiumHTML = '<div style="display:flex;gap:5px;margin-bottom:14px;align-items:flex-end;padding:0 2px;">';
-    podiumDefs.forEach(pd => {
-      if (pd.idx >= data.length) return;
-      const r = data[pd.idx];
-      podiumHTML += `
-        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;">
-          <div style="font-family:'Bangers',cursive;font-size:10px;color:${pd.nameColor};letter-spacing:1px;text-shadow:${pd.shadow};white-space:nowrap;">${pd.label}</div>
-          <div style="font-family:'Orbitron',monospace;font-size:${pd.idx===0?'10px':'9px'};color:${pd.nameColor};font-weight:900;text-align:center;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-shadow:${pd.shadow};">${r.nickname||'Anon'}</div>
-          <div style="font-family:'Orbitron',monospace;font-size:${pd.idx===0?'13px':'11px'};color:${pd.scoreColor};font-weight:900;text-shadow:${pd.shadow};">${(r.score||0).toLocaleString()}</div>
-          <div style="height:${pd.height};width:100%;background:${pd.grad};border-radius:8px 8px 0 0;border:1px solid ${pd.glow};box-shadow:0 0 14px ${pd.glow};display:flex;align-items:center;justify-content:center;">
-            <span style="font-family:'Bangers',cursive;font-size:28px;color:rgba(255,255,255,0.2);">${pd.pos}</span>
+    const rankBg = ['rgba(255,200,0,0.13)','rgba(180,190,210,0.09)','rgba(180,100,30,0.09)'];
+    const trophyBig = ['🥇','🥈','🥉'];
+    // Top 3 podium
+    let podiumHTML = '';
+    if(data.length >= 1) {
+      podiumHTML = '<div style="display:flex;gap:6px;margin-bottom:10px;align-items:flex-end;">';
+      // Order: 2nd, 1st, 3rd
+      const order = data.length === 1 ? [0] : data.length === 2 ? [1,0] : [1,0,2];
+      const heights = ['72px','90px','60px'];
+      const labelH = ['2°','1°','3°'];
+      order.forEach((idx, pos) => {
+        const r = data[idx];
+        const h = heights[pos];
+        const grad = podiumColors[idx] || 'rgba(255,255,255,0.1)';
+        podiumHTML += `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;">
+          <div style="font-size:${idx===0?'22px':'16px'}">${trophyBig[idx]}</div>
+          <div style="font-family:'Orbitron',monospace;font-size:9px;color:#fff;font-weight:900;text-align:center;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${r.nickname||'Anon'}</div>
+          <div style="font-family:'Orbitron',monospace;font-size:11px;color:#ffd600;font-weight:900;">${(r.score||0).toLocaleString()}</div>
+          <div style="height:${h};width:100%;background:${grad};border-radius:6px 6px 0 0;border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;">
+            <span style="font-family:'Bangers',cursive;font-size:22px;color:rgba(255,255,255,0.25);">${labelH[pos]}</span>
           </div>
         </div>`;
-    });
-    podiumHTML += '</div>';
-
-    // ── LISTA 4–100 ───────────────────────────────────────────────
-    const restRows = data.slice(3).map((r, i) => {
+      });
+      podiumHTML += '</div>';
+    }
+    // Rest of the list (4th onwards)
+    const restRows = data.slice(3).map((r,i) => {
       const d = r.created_at ? new Date(r.created_at) : null;
       const fecha = d ? `${d.getDate()}/${d.getMonth()+1}` : '';
-      const partido = r.partido && r.partido !== 'TODOS' ? `<span style="font-size:8px;color:#ab47bc;"> ${r.partido}</span>` : '';
-      const rank = i + 4;
-      const rankColor = rank <= 10 ? '#ffd600' : 'rgba(255,255,255,0.35)';
-      return `<tr>
-        <td style="text-align:center;color:${rankColor};font-family:'Orbitron',monospace;font-size:10px;font-weight:900;padding:4px 3px;">${rank}</td>
-        <td style="padding:4px 3px;"><span style="font-family:'Orbitron',monospace;font-size:9px;color:#fff;">${r.nickname||'Anon'}</span>${partido}</td>
-        <td style="font-family:'Orbitron',monospace;font-size:10px;color:#ffd600;padding:4px 3px;white-space:nowrap;">${(r.score||0).toLocaleString()}</td>
-        <td style="font-family:'Orbitron',monospace;font-size:9px;color:#00e5ff;padding:4px 3px;">Nv${r.nivel||1}</td>
-        <td style="font-size:8px;color:rgba(255,255,255,0.25);padding:4px 3px;">${fecha}</td>
+      const partido = r.partido && r.partido !== 'TODOS' ? `<span style="font-size:9px;color:#ab47bc;"> · ${r.partido}</span>` : '';
+      return `<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+        <td style="text-align:center;color:rgba(255,255,255,0.4);font-size:11px;padding:4px 4px;">${i+4}</td>
+        <td style="padding:4px 4px;"><span style="font-family:'Orbitron',monospace;font-size:10px;color:#fff;">${r.nickname||'Anon'}</span>${partido}</td>
+        <td style="font-family:'Orbitron',monospace;font-size:11px;color:#ffd600;padding:4px 4px;">${(r.score||0).toLocaleString()}</td>
+        <td style="font-family:'Orbitron',monospace;font-size:10px;color:#00e5ff;padding:4px 4px;">Nv${r.nivel||1}</td>
+        <td style="font-size:9px;color:rgba(255,255,255,0.3);padding:4px 4px;">${fecha}</td>
       </tr>`;
     }).join('');
-
-    const tableHTML = restRows ? `
-      <table style="width:100%;border-collapse:collapse;">
-        <tr style="border-bottom:1px solid rgba(255,200,0,0.2);">
-          <th style="background:linear-gradient(90deg,#ff6d00,#ffd600);color:#000;padding:5px 3px;font-family:'Orbitron',monospace;font-size:9px;font-weight:900;">#</th>
-          <th style="background:linear-gradient(90deg,#ff6d00,#ffd600);color:#000;padding:5px 3px;font-family:'Orbitron',monospace;font-size:9px;font-weight:900;">JUGADOR</th>
-          <th style="background:linear-gradient(90deg,#ffd600,#ff6d00);color:#000;padding:5px 3px;font-family:'Orbitron',monospace;font-size:9px;font-weight:900;">PUNTOS</th>
-          <th style="background:linear-gradient(90deg,#ffd600,#ff6d00);color:#000;padding:5px 3px;font-family:'Orbitron',monospace;font-size:9px;font-weight:900;">NIV</th>
-          <th style="background:linear-gradient(90deg,#ff6d00,#ffd600);color:#000;padding:5px 3px;font-family:'Orbitron',monospace;font-size:9px;font-weight:900;">FECHA</th>
-        </tr>
-        ${restRows}
-      </table>
-      <p style="text-align:center;font-size:9px;color:rgba(255,255,255,0.2);margin-top:8px;">Top 100 · Silao 360 Tetris Político</p>` : '';
-
-    body.innerHTML = podiumHTML + tableHTML;
+    const tableHTML = restRows ? `<table style="width:100%;border-collapse:collapse;">${restRows}</table>` : '';
+    body.innerHTML = `
+      ${podiumHTML}
+      ${tableHTML}
+      <p style="text-align:center;font-size:9px;color:rgba(255,255,255,0.25);margin-top:8px;">Top 20 · Silao 360 Tetris Político</p>`;
   }
 }
 
@@ -1598,7 +1612,7 @@ const AC = new (window.AudioContext||window.webkitAudioContext)();
   }
 
   // ── HELPER CAÍDA DESDE ARRIBA ─────────────────────────────────────
-  function dropFromTop(contentFn, baseStyle, count, delayStep){
+  function dropFromTop(contentFn, baseStyle, count, delayStep, baseDelay=0){
     const W=window.innerWidth, H=window.innerHeight;
     for(let i=0;i<count;i++){
       setTimeout(()=>{
@@ -1616,7 +1630,7 @@ const AC = new (window.AudioContext||window.webkitAudioContext)();
           if(y<H+120) requestAnimationFrame(tick); else b.remove();
         };
         requestAnimationFrame(tick);
-      }, i*delayStep);
+      }, baseDelay + i*delayStep);
     }
   }
 
@@ -1658,7 +1672,7 @@ const AC = new (window.AudioContext||window.webkitAudioContext)();
         return e;
       },
       `font-size:${32}px;line-height:1;`,
-      22, 75
+      22, 120, 0
     );
   }
 
@@ -1668,7 +1682,7 @@ const AC = new (window.AudioContext||window.webkitAudioContext)();
     dropFromTop(
       ()=>items[Math.floor(Math.random()*items.length)],
       `font-size:${34}px;line-height:1;`,
-      18, 70
+      18, 130, 400
     );
   }
 
@@ -1725,7 +1739,7 @@ const AC = new (window.AudioContext||window.webkitAudioContext)();
           pointer-events:none;z-index:9999;white-space:nowrap;
           left:0;top:0;`;
         document.body.appendChild(b);
-        const speed=H*1.8+Math.random()*H*1.0;
+        const speed=H*0.45+Math.random()*H*0.2;
         const vx=(Math.random()-0.5)*60;
         let y=-90,x=Math.random()*W,t=0,wobble=(Math.random()-0.5)*22;
         const tick=()=>{
