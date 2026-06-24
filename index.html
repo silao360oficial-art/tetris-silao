@@ -901,9 +901,8 @@ canvas#board {
 
 <script>
 // ── SUPABASE CONFIG ──────────────────────────────────────────
-const SB_URL = 'https://irekcyeoumxnwbtonfup.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlyZWtjeWVvdW14bndiY29ub2Z1cCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzA1OTczODczLCJleHAiOjIwMjE1NDk4NzN9.Qk8om0GwVYCZ7GU9SfJGpjEr8_iNHhVHRtKWkH8RQCA';
-
+const SB_URL = https://irekcyeoumxnwbtonfup.supabase.co
+const SB_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlyZWtjeWVvdW14bndidG9uZnVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMTczMzAsImV4cCI6MjA5NDc5MzMzMH0.gzmCwhJBeaabl83Q4W6cMhpk0Ofwg0OrHaYou9_ksL0
 async function sbGet(table, query='') {
   try {
     const r = await fetch(`${SB_URL}/rest/v1/${table}${query}`, {
